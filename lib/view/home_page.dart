@@ -107,10 +107,10 @@ class HomePage extends StatelessWidget {
                               ),
                             ),
                              Positioned(
-                               bottom: 20,
+                               bottom: 15,
                                child: ClipRRect(
                                    borderRadius: BorderRadius.circular(15),
-                                   child: Image.network(books[index].imageUrl, height: 300, width: 120, fit: BoxFit.fitHeight,)),
+                                   child: Image.network(books[index].imageUrl, height: 200, width: 120, fit: BoxFit.fitHeight,)),
                              )
                            ],
                          ),
