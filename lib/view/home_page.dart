@@ -1,5 +1,6 @@
-import 'package:flutter/cupertino.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttersamplestart/models/book.dart';
 import 'package:sizer/sizer.dart';
 
 
@@ -47,11 +48,76 @@ class HomePage extends StatelessWidget {
              //    padding: const EdgeInsets.all(8.0),
              //    child: Text('hello world'),
              //  ),
-              Image.asset('assets/images/dollar-gill-0V7_N62zZcU-unsplash.jpg'),
+            //  Image.asset('assets/images/dollar-gill-0V7_N62zZcU-unsplash.jpg'),
               Container(
                  height: 250,
                   width: double.infinity,
-                  child: Image.network('https://images.unsplash.com/photo-1509021436665-8f07dbf5bf1d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTF8fGJvb2t8ZW58MHwwfDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',)),
+                  child: CachedNetworkImage(
+                   imageUrl: 'https://images.unsplash.com/photo-1509021436665-8f07dbf5bf1d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTF8fGJvb2t8ZW58MHwwfDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
+                  errorWidget: (c, s, d) => Image.asset('assets/images/dollar-gill-0V7_N62zZcU-unsplash.jpg'),
+                    placeholder: (c, s) => Center(child: CircularProgressIndicator()),
+                  )
+              ),
+              SizedBox(height: 15,),
+              Container(
+                height: 250,
+                width: width,
+                child: ListView.builder(
+                  physics: BouncingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                     itemCount: books.length,
+                    itemBuilder: (context, index){
+                       return Container(
+                         padding: EdgeInsets.only(left:index == 0? 5 : 0),
+                         margin: EdgeInsets.only(right: 15),
+                         width: 350,
+                         child: Stack(
+                           children: [
+                            Positioned(
+                              bottom: 0,
+                              child: Container(
+                                height: 200,
+                                width: 350,
+                                child: Card(
+                                  child: Row(
+                                    children: [
+                                      SizedBox(width: 120,),
+                                      Expanded(
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(books[index].title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
+                                            SizedBox(height: 10,),
+                                            Text(books[index].detail, maxLines: 4, style: TextStyle(color: Colors.blueGrey),),
+                                            SizedBox(height: 17,),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Text(books[index].rating),
+                                                Text(books[index].genre, style:  TextStyle(color: Colors.blue),)
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                             Positioned(
+                               bottom: 20,
+                               child: ClipRRect(
+                                   borderRadius: BorderRadius.circular(15),
+                                   child: Image.network(books[index].imageUrl, height: 300, width: 120, fit: BoxFit.fitHeight,)),
+                             )
+                           ],
+                         ),
+                       );
+                    }
+                ),
+              ),
             ],
           ),
         )
