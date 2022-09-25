@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttersamplestart/models/book.dart';
+import 'package:fluttersamplestart/view/widgets/book_show.dart';
+import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
 
@@ -10,6 +12,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final topBar = MediaQuery.of(context).padding.top;
+    final h = Get.height;
     final bottomBar = MediaQuery.of(context).padding.bottom;
    // final height = MediaQuery.of(context).size.height - topBar;
     final height = 100.h - topBar;
@@ -50,7 +53,7 @@ class HomePage extends StatelessWidget {
              //  ),
             //  Image.asset('assets/images/dollar-gill-0V7_N62zZcU-unsplash.jpg'),
               Container(
-                 height: 250,
+                 height: 240,
                   width: double.infinity,
                   child: CachedNetworkImage(
                    imageUrl: 'https://images.unsplash.com/photo-1509021436665-8f07dbf5bf1d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTF8fGJvb2t8ZW58MHwwfDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
@@ -58,66 +61,65 @@ class HomePage extends StatelessWidget {
                     placeholder: (c, s) => Center(child: CircularProgressIndicator()),
                   )
               ),
-              SizedBox(height: 15,),
+
+
+              // next widget
+
+           BookShow(),
+
+              //next widget
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                child: Text('You may also like', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),),
+              ),
+
+              //next widget
               Container(
-                height: 250,
+                height: 320,
                 width: width,
                 child: ListView.builder(
-                  physics: BouncingScrollPhysics(),
-                  scrollDirection: Axis.horizontal,
-                     itemCount: books.length,
+                    physics: BouncingScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    itemCount: books.length,
                     itemBuilder: (context, index){
-                       return Container(
-                         padding: EdgeInsets.only(left:index == 0? 5 : 0),
-                         margin: EdgeInsets.only(right: 15),
-                         width: 350,
-                         child: Stack(
-                           children: [
-                            Positioned(
-                              bottom: 0,
-                              child: Container(
-                                height: 200,
-                                width: 350,
-                                child: Card(
-                                  child: Row(
-                                    children: [
-                                      SizedBox(width: 120,),
-                                      Expanded(
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(books[index].title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
-                                            SizedBox(height: 10,),
-                                            Text(books[index].detail, maxLines: 4, style: TextStyle(color: Colors.blueGrey),),
-                                            SizedBox(height: 17,),
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Text(books[index].rating),
-                                                Text(books[index].genre, style:  TextStyle(color: Colors.blue),)
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
+                      return Container(
+                        padding: EdgeInsets.only(left:index == 0? 5 : 0),
+                        margin: EdgeInsets.only(right: 5),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              height: 170,
+                              width: 140,
+                              child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.network(books[index].imageUrl, fit:BoxFit.fitWidth,)),
                             ),
-                             Positioned(
-                               bottom: 15,
-                               child: ClipRRect(
-                                   borderRadius: BorderRadius.circular(15),
-                                   child: Image.network(books[index].imageUrl, height: 200, width: 120, fit: BoxFit.fitHeight,)),
-                             )
-                           ],
-                         ),
-                       );
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 5),
+                              child: Text(books[index].title),
+                            ),
+                            Text(books[index].genre, style: TextStyle(color: Colors.blue),)
+                            // TextButton(
+                            //   style: TextButton.styleFrom(
+                            //     padding: EdgeInsets.all(0) ,
+                            //     minimumSize: Size(100, 10)
+                            //   ),
+                            //     onPressed: (){
+                            //     print('hello world');
+                            //     }, child: Text(books[index].genre)
+                            // )
+
+                          ],
+                        ),
+                      );
                     }
                 ),
               ),
+
+
+
             ],
           ),
         )
