@@ -57,7 +57,7 @@ class HomePage extends StatelessWidget {
                   width: double.infinity,
                   child: CachedNetworkImage(
                    imageUrl: 'https://images.unsplash.com/photo-1509021436665-8f07dbf5bf1d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTF8fGJvb2t8ZW58MHwwfDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
-                  errorWidget: (c, s, d) => Image.asset('assets/images/dollar-gill-0V7_N62zZcU-unsplash.jpg'),
+                  errorWidget: (c, s, d) => Image.asset('assets/images/unsplash.jpg'),
                     placeholder: (c, s) => Center(child: CircularProgressIndicator()),
                   )
               ),
@@ -66,6 +66,10 @@ class HomePage extends StatelessWidget {
               // next widget
 
            BookShow(),
+              // CircleAvatar(
+              //   radius: 50,
+              //   backgroundImage: AssetImage('assets/images/unsplash.jpg'),
+              // ),
 
               //next widget
 
