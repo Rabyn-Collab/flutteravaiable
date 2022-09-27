@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttersamplestart/view/home_page.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttersamplestart/providers/counter_provider.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
@@ -10,7 +11,7 @@ void main(){
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     statusBarColor: Color(0xFFF2F5F9)
   ));
-  runApp(Home());
+  runApp(ProviderScope(child: Home()));
 }
 
 
@@ -21,13 +22,55 @@ class Home extends StatelessWidget {
         builder: (context, orientation, deviceType) {
           return GetMaterialApp(
               debugShowCheckedModeBanner: false,
-              //  themeMode: ThemeMode.dark,
-              //   theme: ThemeData.dark().copyWith(
-              //     buttonColor: Colors.black,
-              //   ),
-              home: HomePage()
+               // themeMode: ThemeMode.dark,
+               //  theme: ThemeData.light().copyWith(
+               //  primaryColor: Colors.red
+               //  ),
+              home: Counter()
           );
         }
     );
   }
+}
+
+
+
+class Counter extends StatelessWidget {
+
+
+  @override
+  Widget build(BuildContext context) {
+    print('build');
+    return Scaffold(
+        body: Container(
+          child: Consumer(
+           builder: (context, ref, child) {
+             final numberData = ref.watch(counterProvider).number;
+             return Column(
+               mainAxisAlignment: MainAxisAlignment.center,
+               children: [
+                 Text('$numberData', style: TextStyle(fontSize: 50),),
+                 Row(
+                   mainAxisAlignment: MainAxisAlignment.center,
+                   children: [
+                     TextButton(
+                         onPressed: () {
+                         ref.read(counterProvider).increment();
+                         }, child: Text('increment')),
+                     TextButton(
+                         onPressed: () {
+                           ref.read(counterProvider).decrement();
+                         }, child: Text('decrement')),
+                   ],
+                 ),
+               ],
+             );
+           }
+          ),
+        )
+    );
+  }
+
+
+
 }
