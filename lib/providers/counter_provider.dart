@@ -19,3 +19,8 @@ class CounterProvider extends ChangeNotifier{
 
 
 }
+
+
+// state provider
+
+final numberProvider = StateProvider<int>((ref) => 0);

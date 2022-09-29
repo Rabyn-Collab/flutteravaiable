@@ -45,7 +45,8 @@ class Counter extends StatelessWidget {
         body: Container(
           child: Consumer(
            builder: (context, ref, child) {
-             final numberData = ref.watch(counterProvider).number;
+           //  final numberData = ref.watch(counterProvider).number;
+             final numberData = ref.watch(numberProvider);
              return Column(
                mainAxisAlignment: MainAxisAlignment.center,
                children: [
@@ -55,11 +56,11 @@ class Counter extends StatelessWidget {
                    children: [
                      TextButton(
                          onPressed: () {
-                         ref.read(counterProvider).increment();
+                           ref.read(numberProvider.notifier).state++;
                          }, child: Text('increment')),
                      TextButton(
                          onPressed: () {
-                           ref.read(counterProvider).decrement();
+                           ref.read(numberProvider.notifier).state--;
                          }, child: Text('decrement')),
                    ],
                  ),
