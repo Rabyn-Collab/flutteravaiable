@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttersamplestart/providers/counter_provider.dart';
+import 'package:fluttersamplestart/view/home_page.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
@@ -26,7 +27,7 @@ class Home extends StatelessWidget {
                //  theme: ThemeData.light().copyWith(
                //  primaryColor: Colors.red
                //  ),
-              home: Counter()
+              home: HomePage()
           );
         }
     );
