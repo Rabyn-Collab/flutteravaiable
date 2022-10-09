@@ -4,8 +4,8 @@
 
 
 class Todo{
-  final String label;
-  final String createTime;
+   String label;
+   String createTime;
 
   Todo({
    required this.createTime,

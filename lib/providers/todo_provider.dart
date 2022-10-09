@@ -22,15 +22,24 @@ class TodoProvider extends StateNotifier<List<Todo>>{
 
 
   void addTodo(Todo todo){
-    // List m = [22, 55, 77, 99];
-    // int n = 90;
-    // m = [...m, n];
      state = [...state, todo];
   }
 
-  void removeTodo(){
-
+  void removeTodo(int index){
+     state.removeAt(index);
+     state = [...state];
   }
+
+  void editTodo(Todo todo, String label){
+    todo.label = label;
+    state = [...state];
+    // state = [
+    //   for(final element in state )
+    //     if(element == todo) todo else element
+    // ];
+  }
+
+
 
 }
 
