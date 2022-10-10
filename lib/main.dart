@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fluttersamplestart/providers/counter_provider.dart';
-import 'package:fluttersamplestart/view/home_page.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
 
 
+Future<void> getData() async{
+ await Future.delayed(Duration(seconds: 10));
+  print('hello world');
+}
+
+
 void main(){
+  getData();
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     statusBarColor: Color(0xFFF2F5F9)
   ));
@@ -27,52 +32,10 @@ class Home extends StatelessWidget {
                //  theme: ThemeData.light().copyWith(
                //  primaryColor: Colors.red
                //  ),
-              home: HomePage()
+              home: Container()
           );
         }
     );
   }
 }
 
-
-
-class Counter extends StatelessWidget {
-
-
-  @override
-  Widget build(BuildContext context) {
-    print('build');
-    return Scaffold(
-        body: Container(
-          child: Consumer(
-           builder: (context, ref, child) {
-           //  final numberData = ref.watch(counterProvider).number;
-             final numberData = ref.watch(numberProvider);
-             return Column(
-               mainAxisAlignment: MainAxisAlignment.center,
-               children: [
-                 Text('$numberData', style: TextStyle(fontSize: 50),),
-                 Row(
-                   mainAxisAlignment: MainAxisAlignment.center,
-                   children: [
-                     TextButton(
-                         onPressed: () {
-                           ref.read(numberProvider.notifier).state++;
-                         }, child: Text('increment')),
-                     TextButton(
-                         onPressed: () {
-                           ref.read(numberProvider.notifier).state--;
-                         }, child: Text('decrement')),
-                   ],
-                 ),
-               ],
-             );
-           }
-          ),
-        )
-    );
-  }
-
-
-
-}
