@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttersamplestart/service/movie_service.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
 
-
-Future<void> getData() async{
- await Future.delayed(Duration(seconds: 10));
-  print('hello world');
-}
+//
+// Future<void> getData() async{
+//  await Future.delayed(Duration(seconds: 10));
+//   print('hello world');
+// }
 
 
 void main(){
-  getData();
+  //getData();
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     statusBarColor: Color(0xFFF2F5F9)
   ));
@@ -22,6 +23,7 @@ void main(){
 
 
 class Home extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return Sizer(
