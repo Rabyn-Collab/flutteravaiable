@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fluttersamplestart/service/movie_service.dart';
+import 'package:fluttersamplestart/view/home_page.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
@@ -15,9 +15,9 @@ import 'package:sizer/sizer.dart';
 
 void main(){
   //getData();
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    statusBarColor: Color(0xFFF2F5F9)
-  ));
+  // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+  //   statusBarColor: Color(0xFFF2F5F9)
+  // ));
   runApp(ProviderScope(child: Home()));
 }
 
@@ -30,11 +30,11 @@ class Home extends StatelessWidget {
         builder: (context, orientation, deviceType) {
           return GetMaterialApp(
               debugShowCheckedModeBanner: false,
-               // themeMode: ThemeMode.dark,
-               //  theme: ThemeData.light().copyWith(
-               //  primaryColor: Colors.red
-               //  ),
-              home: Container()
+              theme: ThemeData.dark().copyWith(
+                scaffoldBackgroundColor: Colors.black,
+                appBarTheme: AppBarTheme(color: Colors.black)
+              ),
+              home: HomePage()
           );
         }
     );

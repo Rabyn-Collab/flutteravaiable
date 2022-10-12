@@ -6,8 +6,6 @@ import 'package:dio/dio.dart';
 
 class MovieService{
 
-
-
  static  Future<Either<String, List<Movie>>> getMovieByCategory () async{
    final dio = Dio();
        try{
@@ -26,6 +24,13 @@ class MovieService{
 
 
    }
+
+
+
+
+
+
+
 
 
 
