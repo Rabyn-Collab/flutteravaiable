@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttersamplestart/api.dart';
+import 'package:fluttersamplestart/providers/movie_provider.dart';
 import 'package:fluttersamplestart/view/widgets/tab_bar_widget.dart';
 
 
@@ -24,30 +27,48 @@ class HomePage extends StatelessWidget {
               ],
             ),
           ),
-          bottom: TabBar(
-            indicator: BoxDecoration(
-              color: Colors.pink,
-              borderRadius: BorderRadius.circular(50)
+          bottom: PreferredSize(
+            preferredSize: Size(double.infinity, 45),
+            child: Consumer(
+              builder: (context, ref, child) {
+                return TabBar(
+                    onTap: (index) {
+                      switch(index){
+                        case 0:
+                          ref.read(movieProvider.notifier).changeCategory(apiPath: Api.getPopularMovie);
+                         break;
+                        case 1:
+                          ref.read(movieProvider.notifier).changeCategory(apiPath: Api.getTopRatedMovie);
+                          break;
+                        default:
+                          ref.read(movieProvider.notifier).changeCategory(apiPath: Api.getUpcomingMovie);
+                      }
+                    },
+                    indicator: BoxDecoration(
+                        color: Colors.pink,
+                        borderRadius: BorderRadius.circular(50)
+                    ),
+                    tabs: [
+                      Tab(
+                        text: 'Popular',
+                      ),
+                      Tab(
+                        text: 'Top_Rated',
+                      ),
+                      Tab(
+                        text: 'UpComing',
+                      ),
+                    ]
+                );
+              }
             ),
-              tabs: [
-                Tab(
-                  text: 'Popular',
-                ),
-                Tab(
-                  text: 'Top_Rated',
-                ),
-                Tab(
-                  text: 'UpComing',
-                ),
-              ]
           ),
         ),
           body: TabBarView(
               children: [
                 TabBarWidget(),
-                Text('top'),
-                Text('upcoming'),
-
+                TabBarWidget(),
+                TabBarWidget(),
           ])
       ),
     );

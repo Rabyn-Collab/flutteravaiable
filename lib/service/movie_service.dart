@@ -6,13 +6,13 @@ import 'package:dio/dio.dart';
 
 class MovieService{
 
- static  Future<Either<String, List<Movie>>> getMovieByCategory () async{
+ static  Future<Either<String, List<Movie>>> getMovieByCategory ({required String apiPath, required int page}) async{
    final dio = Dio();
        try{
-        final response = await dio.get(Api.getPopularMovie,
+        final response = await dio.get(apiPath,
             queryParameters: {
                'api_key': '2a0f926961d00c667e191a21c14461f8',
-                'page': 1,
+                'page': page,
                'language': 'en-US'
               }
         );
