@@ -65,6 +65,7 @@ class HomePage extends StatelessWidget {
           ),
         ),
           body: TabBarView(
+            physics: NeverScrollableScrollPhysics(),
               children: [
                 TabBarWidget(),
                 TabBarWidget(),
