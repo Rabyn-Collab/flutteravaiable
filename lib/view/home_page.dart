@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttersamplestart/api.dart';
 import 'package:fluttersamplestart/providers/movie_provider.dart';
+import 'package:fluttersamplestart/view/search_page.dart';
 import 'package:fluttersamplestart/view/widgets/tab_bar_widget.dart';
+import 'package:get/get.dart';
 
 
 
@@ -23,7 +25,10 @@ class HomePage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text('Watch Now', style: TextStyle( fontSize: 30, fontWeight: FontWeight.w500),),
-                IconButton(onPressed: (){}, icon: Icon(Icons.search, size: 30,))
+                IconButton(
+                    onPressed: (){
+                  Get.to(() => SearchPage(), transition: Transition.leftToRight);
+                }, icon: Icon(Icons.search, size: 30,))
               ],
             ),
           ),
@@ -67,9 +72,9 @@ class HomePage extends StatelessWidget {
           body: TabBarView(
             physics: NeverScrollableScrollPhysics(),
               children: [
-                TabBarWidget(),
-                TabBarWidget(),
-                TabBarWidget(),
+                TabBarWidget(false),
+                TabBarWidget(false),
+                TabBarWidget(false),
           ])
       ),
     );

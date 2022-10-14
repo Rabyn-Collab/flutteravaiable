@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fluttersamplestart/view/widgets/custom_loading.dart';
 import '../../providers/movie_provider.dart';
 
 
@@ -10,14 +11,16 @@ import '../../providers/movie_provider.dart';
 
 
 class TabBarWidget extends StatelessWidget {
+final bool isSearchPage;
+TabBarWidget(this.isSearchPage);
 
   @override
   Widget build(BuildContext context) {
     return Consumer(
         builder: (context, ref, child) {
-          final movieData = ref.watch(movieProvider);
+          final movieData = isSearchPage ? ref.watch(movieSearchProvider) :ref.watch(movieProvider);
             if(movieData.isLoad == true){
-              return Center(child: CircularProgressIndicator());
+              return Center(child: CustomLoading());
             }else if(movieData.errText.isEmpty){
               return  Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -32,7 +35,10 @@ class TabBarWidget extends StatelessWidget {
                       return GridTile(
                           header: ClipRRect(
                               borderRadius: BorderRadius.circular(15),
-                              child: Image.network(movieData.movies[index].poster_path)),
+                              child: CachedNetworkImage(
+                                placeholder: (c, s) => Center(child: CustomLoading(),),
+                                errorWidget: (c,s,d) => Image.asset('assets/images/movie.png'),
+                                imageUrl:  movieData.movies[index].poster_path)),
                           child: Container());
                     }
                 ),

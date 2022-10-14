@@ -7,5 +7,6 @@ class Api{
   static const String getPopularMovie = '$baseUrl/popular';
   static const String getTopRatedMovie = '$baseUrl/top_rated';
   static const String getUpcomingMovie = '$baseUrl/upcoming';
+  static const String getSearchMovie = 'https://api.themoviedb.org/3/search/movie';
 
 }

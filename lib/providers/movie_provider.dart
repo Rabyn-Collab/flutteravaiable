@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttersamplestart/api.dart';
 import 'package:fluttersamplestart/service/movie_service.dart';
-import '../models/movie.dart';
 import '../models/movie_state.dart';
 
 
@@ -39,6 +38,29 @@ class MovieProvider extends StateNotifier<MovieState>{
 
 
 
+
+
+
+final movieSearchProvider = StateNotifierProvider.autoDispose<SearchMovieProvider, MovieState>((ref) => SearchMovieProvider(MovieState(
+    movies: [], isLoad: false, errText: '', apiPath: Api.getSearchMovie, page: 1)));
+
+
+class SearchMovieProvider extends StateNotifier<MovieState>{
+  SearchMovieProvider(super.state);
+
+  Future<void>  getMovieData({required String searchText}) async {
+    state = state.copyWith(movieState: state, isLoad: true);
+    final data = await MovieService.getSearchMovie(apiPath: state.apiPath, query: searchText, page: state.page);
+    data.fold((l) {
+      state = state.copyWith(movieState: state, errText: l, isLoad: false);
+    },  (r) {
+      state = state.copyWith(movieState: state, isLoad: false,movies: r,errText: '');
+    });
+  }
+
+
+
+}
 
 
 
