@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttersamplestart/view/home_page.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
-
+import 'package:hive_flutter/hive_flutter.dart';
 
 //
 // Future<void> getData() async{
@@ -13,7 +13,11 @@ import 'package:sizer/sizer.dart';
 // }
 
 
-void main(){
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Hive.initFlutter();
+  await Hive.openBox<String>('data');
   //getData();
   // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
   //   statusBarColor: Color(0xFFF2F5F9)

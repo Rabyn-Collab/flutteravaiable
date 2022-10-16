@@ -10,6 +10,7 @@ class MovieState{
   final bool isLoad;
   final String apiPath;
   final int page;
+  final bool isLoadMore;
 
 
   MovieState({
@@ -17,18 +18,20 @@ class MovieState{
   required this.isLoad,
   required this.errText,
   required this.apiPath,
-    required this.page
+    required this.page,
+    required this.isLoadMore
  });
 
 
  MovieState copyWith({required MovieState movieState, String? errText, List<Movie>? movies,
-   bool? isLoad, String? apiPath, int? page}){
+   bool? isLoad, String? apiPath, int? page, bool? isLoadMore}){
    return MovieState(
        movies: movies ?? movieState.movies,
        isLoad: isLoad ?? movieState.isLoad,
        errText: errText ??  movieState.errText,
        apiPath: apiPath ?? movieState.apiPath,
-     page: page ?? movieState.page
+     page: page ?? movieState.page,
+     isLoadMore:  isLoadMore ?? movieState.isLoadMore
    );
  }
 
