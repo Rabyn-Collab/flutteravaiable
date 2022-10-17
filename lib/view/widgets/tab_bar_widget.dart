@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fluttersamplestart/view/detail_page.dart';
 import 'package:fluttersamplestart/view/widgets/custom_loading.dart';
+import 'package:get/get.dart';
 import '../../providers/movie_provider.dart';
 
 
@@ -53,18 +55,23 @@ TabBarWidget(this.isSearchPage);
                               childAspectRatio: 2 / 3,
                               crossAxisCount: 2),
                           itemBuilder: (context, index) {
-                            return GridTile(
-                                header: ClipRRect(
-                                    borderRadius: BorderRadius.circular(15),
-                                    child: CachedNetworkImage(
-                                        placeholder: (c, s) =>
-                                            Center(child: CustomLoading(),),
-                                        errorWidget: (c, s, d) =>
-                                            Image.asset(
-                                                'assets/images/movie.png'),
-                                        imageUrl: movieData.movies[index]
-                                            .poster_path)),
-                                child: Container());
+                            return InkWell(
+                              onTap: (){
+                                Get.to(() => DetailPage(movieData.movies[index]), transition: Transition.leftToRight);
+                              },
+                              child: GridTile(
+                                  header: ClipRRect(
+                                      borderRadius: BorderRadius.circular(15),
+                                      child: CachedNetworkImage(
+                                          placeholder: (c, s) =>
+                                              Center(child: CustomLoading(),),
+                                          errorWidget: (c, s, d) =>
+                                              Image.asset(
+                                                  'assets/images/movie.png'),
+                                          imageUrl: movieData.movies[index]
+                                              .poster_path)),
+                                  child: Container()),
+                            );
                           }
                       ),
                     ),

@@ -87,4 +87,31 @@ class MovieService{
 
 
 
+
+
+ static  Future<Either<String, String>> getMovieKey ({ required int videoId}) async{
+   final dio = Dio();
+   try{
+     final response = await dio.get('${Api.getVideoKey}/$videoId/videos',
+         queryParameters: {
+           'api_key': '2a0f926961d00c667e191a21c14461f8',
+         }
+     );
+     if((response.data['results'] as List).isEmpty){
+       return  left('try using another keyword');
+     }else{
+       final data = (response.data['results'] as List)[0]['key'] as String;
+       return  right(data);
+     }
+
+   }on DioError catch (err){
+     final errMessage =  DioException().getDioError(err);
+     return  left(errMessage);
+   }
+
+
+ }
+
+
+
 }
