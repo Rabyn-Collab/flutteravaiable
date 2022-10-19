@@ -15,7 +15,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-
+  await Future.delayed(Duration(milliseconds: 500));
   await Hive.initFlutter();
   await Hive.openBox<String>('data');
   //getData();
