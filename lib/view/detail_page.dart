@@ -14,7 +14,6 @@ final  Movie movie;
 
   @override
   Widget build(BuildContext context, ref) {
-    print(movie.id);
     final videoData = ref.watch(videoProvider(movie.id));
     return Scaffold(
         body: SafeArea(
@@ -67,7 +66,7 @@ class _VideoWidgetState extends State<VideoWidget> {
         podPlayerConfig: const PodPlayerConfig(
             autoPlay: true,
             isLooping: false,
-            videoQualityPriority: [720, 360]
+            videoQualityPriority: [720, 360, 1080]
         )
     )..initialise();
     super.initState();

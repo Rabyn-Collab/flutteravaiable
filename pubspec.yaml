@@ -47,9 +47,33 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   pod_player: ^0.1.0
+  flutter_native_splash: ^2.2.11
+
+
+flutter_native_splash:
+  color: "#121212"
+  image: assets/images/movie.png
+  icon_background_color_dark: "#121212"
+
+  android_12:
+    color: "#121212"
+    image: assets/images/movie.png
+    icon_background_color_dark: "#121212"
+
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.10.0
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/movie.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

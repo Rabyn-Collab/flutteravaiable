@@ -16,66 +16,66 @@ class HomePage extends StatelessWidget {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        appBar: AppBar(
-          toolbarHeight: 100,
-          flexibleSpace: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 60),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Watch Now', style: TextStyle( fontSize: 30, fontWeight: FontWeight.w500),),
-                IconButton(
-                    onPressed: (){
-                  Get.to(() => SearchPage(), transition: Transition.leftToRight);
-                }, icon: Icon(Icons.search, size: 30.0,))
-              ],
+          appBar: AppBar(
+            toolbarHeight: 100,
+            flexibleSpace: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 60),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Watch Now', style: TextStyle( fontSize: 30, fontWeight: FontWeight.w500),),
+                  IconButton(
+                      onPressed: (){
+                        Get.to(() => SearchPage(), transition: Transition.leftToRight);
+                      }, icon: Icon(Icons.search, size: 30.0,))
+                ],
+              ),
+            ),
+            bottom: PreferredSize(
+              preferredSize: Size(double.infinity, 45),
+              child: Consumer(
+                  builder: (context, ref, child) {
+                    return TabBar(
+                        onTap: (index) {
+                          switch(index){
+                            case 0:
+                              ref.read(movieProvider.notifier).changeCategory(apiPath: Api.getPopularMovie);
+                              break;
+                            case 1:
+                              ref.read(movieProvider.notifier).changeCategory(apiPath: Api.getTopRatedMovie);
+                              break;
+                            default:
+                              ref.read(movieProvider.notifier).changeCategory(apiPath: Api.getUpcomingMovie);
+                          }
+                        },
+                        indicator: BoxDecoration(
+                            color: Colors.pink,
+                            borderRadius: BorderRadius.circular(50)
+                        ),
+                        tabs: [
+                          Tab(
+                            text: 'Popular',
+                          ),
+                          Tab(
+                            text: 'Top_Rated',
+                          ),
+                          Tab(
+                            text: 'UpComing',
+                          ),
+                        ]
+                    );
+                  }
+              ),
             ),
           ),
-          bottom: PreferredSize(
-            preferredSize: Size(double.infinity, 45),
-            child: Consumer(
-              builder: (context, ref, child) {
-                return TabBar(
-                    onTap: (index) {
-                      switch(index){
-                        case 0:
-                          ref.read(movieProvider.notifier).changeCategory(apiPath: Api.getPopularMovie);
-                         break;
-                        case 1:
-                          ref.read(movieProvider.notifier).changeCategory(apiPath: Api.getTopRatedMovie);
-                          break;
-                        default:
-                          ref.read(movieProvider.notifier).changeCategory(apiPath: Api.getUpcomingMovie);
-                      }
-                    },
-                    indicator: BoxDecoration(
-                        color: Colors.pink,
-                        borderRadius: BorderRadius.circular(50)
-                    ),
-                    tabs: [
-                      Tab(
-                        text: 'Popular',
-                      ),
-                      Tab(
-                        text: 'Top_Rated',
-                      ),
-                      Tab(
-                        text: 'UpComing',
-                      ),
-                    ]
-                );
-              }
-            ),
-          ),
-        ),
           body: TabBarView(
-            physics: NeverScrollableScrollPhysics(),
+              physics: NeverScrollableScrollPhysics(),
               children: [
                 TabBarWidget(false),
                 TabBarWidget(false),
                 TabBarWidget(false),
-          ])
+              ])
       ),
     );
   }
