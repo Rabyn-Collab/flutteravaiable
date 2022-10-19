@@ -28,7 +28,7 @@ class HomePage extends StatelessWidget {
                 IconButton(
                     onPressed: (){
                   Get.to(() => SearchPage(), transition: Transition.leftToRight);
-                }, icon: Icon(Icons.search, size: 30,))
+                }, icon: Icon(Icons.search, size: 30.0,))
               ],
             ),
           ),
