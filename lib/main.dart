@@ -1,11 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fluttersamplestart/view/home_page.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 import 'firebase_options.dart';
 
