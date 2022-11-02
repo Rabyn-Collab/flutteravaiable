@@ -1,11 +1,18 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../providers/toggle_provider.dart';
+import '../providers/common_provider.dart';
 
 class AuthPage extends ConsumerWidget {
-  const AuthPage({Key? key}) : super(key: key);
+   AuthPage({Key? key}) : super(key: key);
+
+  final _form = GlobalKey<FormState>();
+  final nameController = TextEditingController();
+  final passController = TextEditingController();
+  final mailController = TextEditingController();
 
   @override
   Widget build(BuildContext context, ref) {
@@ -13,6 +20,7 @@ class AuthPage extends ConsumerWidget {
         MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
     final width = MediaQuery.of(context).size.width;
     final isLogin = ref.watch(loginProvider);
+    final image = ref.watch(imageProvider);
     return SafeArea(
       child: Scaffold(
           resizeToAvoidBottomInset: false,
@@ -36,62 +44,131 @@ class AuthPage extends ConsumerWidget {
                   right: width * 0.08,
                   left: width * 0.08,
                   top: deviceHeight * 0.21,
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    elevation: 10,
-                    child: Container(
-                      height: deviceHeight * 0.48,
-                      child: (Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Expanded(
-                            child: Column(
-                              children: [
-                                 Padding(
-                                  padding: EdgeInsets.only(top: 60.0),
-                                  child: Text(
-                                   isLogin ? "Login" : 'Sign Up',
-                                    style: TextStyle(
-                                        fontSize: 22, color: Color(0xff4252B5)),
+                  child: Form(
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      elevation: 10,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        height:isLogin ? deviceHeight * 0.48 : deviceHeight * 0.6,
+                        child: (
+                            Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                children: [
+                                   Padding(
+                                    padding: EdgeInsets.only(top: 60.0),
+                                    child: Text(
+                                     isLogin ? "Login" : 'Sign Up',
+                                      style: TextStyle(
+                                          fontSize: 22, color: Color(0xff4252B5)),
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                _buildPadding(
-                                  hintText: 'Email',
-                                  icon: CupertinoIcons.mail
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                _buildPadding(
-                                    hintText: 'Password',
-                                    icon: CupertinoIcons.padlock
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                              ],
+
+                              if(isLogin == false)  Column(
+                                children: [
+                                  const SizedBox(height: 20,),
+                                  _buildPadding(
+                                    valid: (val){
+                                       if(val!.isEmpty){
+                                         return 'please provide username';
+                                       }
+                                       return null;
+                                    },
+                                    controller: nameController,
+                                      hintText: 'Username',
+                                      icon: CupertinoIcons.person
+                                  ),
+                                ],
+                              ),
+
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  _buildPadding(
+                                      valid: (val){
+                                        if(val!.isEmpty){
+                                          return 'please provide email';
+                                        }
+                                        return null;
+                                      },
+                                    controller: mailController,
+                                    hintText: 'Email',
+                                    icon: CupertinoIcons.mail
+                                  ),
+                                  const SizedBox(
+                                    height: 25,
+                                  ),
+                                  _buildPadding(
+                                      valid: (val){
+                                        if(val!.isEmpty){
+                                          return 'please provide password';
+                                        }
+                                        return null;
+                                      },
+                                    controller: passController,
+                                      hintText: 'Password',
+                                      icon: CupertinoIcons.padlock
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 10),
-                            child: ElevatedButton(
+
+                          if(isLogin == false)  Container(
+                              height: 120,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.black)
+                              ),
+                              child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  padding: EdgeInsets.all(14),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15)),
-                                  backgroundColor: const Color(0xff4252B5),
+                                  backgroundColor: Colors.white
                                 ),
-                                onPressed: () {},
-                                child: const Text("Submit")),
-                          )
-                        ],
-                      )),
+                                onPressed: (){
+                                  showDialog(context: context, builder: (context){
+                                    return AlertDialog(
+                                        title: Text('choose option'),
+                                      actions: [
+                                        TextButton(
+                                            onPressed: (){
+                                           Navigator.of(context).pop();
+                                           ref.read(imageProvider.notifier).pickAnImage(true);
+                                            }, child: Text('camera')),
+                                        TextButton(
+                                            onPressed: (){
+                                              Navigator.of(context).pop();
+                                              ref.read(imageProvider.notifier).pickAnImage(false);
+                                            }, child: Text('gallery')),
+                                      ],
+                                    );
+                                  });
+                                },
+                                child: image != null ? Image.file(File(image.path)):  Center(
+                                    child: Text('please select an image', style: TextStyle(color: Colors.black),)),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    padding: EdgeInsets.all(14),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(15)),
+                                    backgroundColor: const Color(0xff4252B5),
+                                  ),
+                                  onPressed: () {},
+                                  child: const Text("Submit")),
+                            )
+                          ],
+                        )),
+                      ),
                     ),
                   )),
               Align(
@@ -101,16 +178,16 @@ class AuthPage extends ConsumerWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
-                          "Dont Have a Account?",
+                         Text(
+                          isLogin  ? 'Don\'t Have a Account': 'Already have an account',
                           style: TextStyle(fontSize: 18),
                         ),
                         TextButton(
                             onPressed: () {
                               ref.read(loginProvider.notifier).toggle();
                             },
-                            child: const Text(
-                              "Sign Up",
+                            child:  Text(
+                              isLogin  ?  "Sign Up" : 'Login',
                               style: TextStyle(fontSize: 18),
                             ))
                       ],
@@ -121,19 +198,22 @@ class AuthPage extends ConsumerWidget {
     );
   }
 
-  Padding _buildPadding({required String hintText, required IconData icon}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: TextFormField(
-        obscureText: false,
-        decoration: InputDecoration(
-          focusedBorder: const UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.black)),
-          hintText: hintText,
-          suffixIcon: Icon(
-            icon,
-            color: Colors.black,
-          ),
+  TextFormField _buildPadding({required String hintText,
+    required IconData icon,
+  required TextEditingController controller,
+  required String? Function(String?)? valid
+  }) {
+    return TextFormField(
+      controller:  controller,
+      validator: valid,
+      obscureText: false,
+      decoration: InputDecoration(
+        focusedBorder: const UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.black)),
+        hintText: hintText,
+        suffixIcon: Icon(
+          icon,
+          color: Colors.black,
         ),
       ),
     );
