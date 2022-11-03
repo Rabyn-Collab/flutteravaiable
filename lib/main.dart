@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -34,6 +36,43 @@ class Home extends StatelessWidget {
               home: AuthPage()
           );
         }
+    );
+  }
+}
+
+StreamController<int>  numberStream = StreamController().stream.asBroadcastStream() as StreamController<int>;
+
+
+class Counter extends StatelessWidget {
+
+
+  int number = 0;
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: SafeArea(
+            child: StreamBuilder<int>(
+              initialData: 0,
+              stream: numberStream.stream,
+              builder: (context, snapshot) {
+                // if(snapshot.connectionState == ConnectionState.waiting){
+                //   return Center(child: CircularProgressIndicator());
+               if(snapshot.hasData){
+                  return Center(child: Text('${snapshot.data}', style: TextStyle(fontSize: 20),));
+                }else{
+                  return Center(child: Text('${snapshot.data}', style: TextStyle(fontSize: 20),));
+                }
+              }
+            )
+        ),
+      floatingActionButton: FloatingActionButton(
+          onPressed: (){
+            numberStream.sink.add(number++);
+          },
+        child: Icon(Icons.add),
+      ),
     );
   }
 }

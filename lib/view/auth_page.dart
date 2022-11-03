@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get/get.dart';
 
 import '../providers/common_provider.dart';
 
@@ -45,6 +46,7 @@ class AuthPage extends ConsumerWidget {
                   left: width * 0.08,
                   top: deviceHeight * 0.21,
                   child: Form(
+                    key: _form,
                     child: Card(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15.0),
@@ -52,7 +54,7 @@ class AuthPage extends ConsumerWidget {
                       elevation: 10,
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
-                        height:isLogin ? deviceHeight * 0.48 : deviceHeight * 0.6,
+                        height:isLogin ? deviceHeight * 0.48 : deviceHeight * 0.69,
                         child: (
                             Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -93,6 +95,8 @@ class AuthPage extends ConsumerWidget {
                                       valid: (val){
                                         if(val!.isEmpty){
                                           return 'please provide email';
+                                        }else if(!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(val)){
+                                          return 'please provide  valid email';
                                         }
                                         return null;
                                       },
@@ -107,9 +111,12 @@ class AuthPage extends ConsumerWidget {
                                       valid: (val){
                                         if(val!.isEmpty){
                                           return 'please provide password';
+                                        }else if(val.length > 20){
+                                          return 'maximum length is 19';
                                         }
                                         return null;
                                       },
+                                      isPass: true,
                                     controller: passController,
                                       hintText: 'Password',
                                       icon: CupertinoIcons.padlock
@@ -163,7 +170,35 @@ class AuthPage extends ConsumerWidget {
                                         borderRadius: BorderRadius.circular(15)),
                                     backgroundColor: const Color(0xff4252B5),
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    _form.currentState!.save();
+                                    if(_form.currentState!.validate()){
+                                      if(isLogin){
+
+                                      }else{
+                                        if(image == null){
+                                          Get.defaultDialog(
+                                              title: 'required image',
+                                              content: Text('please provide image'),
+                                            actions: [
+                                              TextButton(
+                                                  onPressed: (){
+                                                    Navigator.of(context).pop();
+                                                  }, child: Text('close'))
+                                            ]
+                                          );
+                                        }else{
+
+
+                                        }
+                                      }
+
+
+
+                                    }
+
+
+                                  },
                                   child: const Text("Submit")),
                             )
                           ],
@@ -184,6 +219,8 @@ class AuthPage extends ConsumerWidget {
                         ),
                         TextButton(
                             onPressed: () {
+                              _form.currentState!.reset();
+
                               ref.read(loginProvider.notifier).toggle();
                             },
                             child:  Text(
@@ -201,12 +238,13 @@ class AuthPage extends ConsumerWidget {
   TextFormField _buildPadding({required String hintText,
     required IconData icon,
   required TextEditingController controller,
-  required String? Function(String?)? valid
+  required String? Function(String?)? valid,
+    bool? isPass
   }) {
     return TextFormField(
       controller:  controller,
       validator: valid,
-      obscureText: false,
+      obscureText: isPass == true  ? true: false,
       decoration: InputDecoration(
         focusedBorder: const UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.black)),
