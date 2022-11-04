@@ -10,6 +10,6 @@ class FireInstances{
   static FirebaseAuth fireAuth = FirebaseAuth.instance;
   static FirebaseFirestore fireStore = FirebaseFirestore.instance;
   static FirebaseStorage fireStorage = FirebaseStorage.instance;
-  static FirebaseChatCore fireCahtCore = FirebaseChatCore.instance;
+  static FirebaseChatCore fireChatCore = FirebaseChatCore.instance;
 
 }

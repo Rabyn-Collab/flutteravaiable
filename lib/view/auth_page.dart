@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 
 import '../providers/common_provider.dart';
+import '../providers/firebase_auth_provider.dart';
 
 class AuthPage extends ConsumerWidget {
    AuthPage({Key? key}) : super(key: key);
@@ -17,11 +18,22 @@ class AuthPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
+    ref.listen(authProvider, (previous, next) {
+      print(next.err);
+     if(next.err != ''){
+       ScaffoldMessenger.of(context).hideCurrentSnackBar();
+       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+           duration: Duration(seconds: 1),
+           content: Text(next.err)));
+     }
+    });
+
     final deviceHeight =
         MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
     final width = MediaQuery.of(context).size.width;
     final isLogin = ref.watch(loginProvider);
     final image = ref.watch(imageProvider);
+    final auth = ref.watch(authProvider);
     return SafeArea(
       child: Scaffold(
           resizeToAvoidBottomInset: false,
@@ -170,10 +182,16 @@ class AuthPage extends ConsumerWidget {
                                         borderRadius: BorderRadius.circular(15)),
                                     backgroundColor: const Color(0xff4252B5),
                                   ),
-                                  onPressed: () {
+                                  onPressed: auth.isLoad ? null: () async {
                                     _form.currentState!.save();
                                     if(_form.currentState!.validate()){
+
                                       if(isLogin){
+                                      //login method
+                                        await ref.read(authProvider.notifier).userLogin(
+                                            email: mailController.text.trim(),
+                                            password: passController.text.trim(),
+                                        );
 
                                       }else{
                                         if(image == null){
@@ -188,6 +206,14 @@ class AuthPage extends ConsumerWidget {
                                             ]
                                           );
                                         }else{
+                                          //signup method
+
+                                         await ref.read(authProvider.notifier).userSignUp(
+                                             email: mailController.text.trim(),
+                                             password: passController.text.trim(),
+                                             image: image,
+                                             username: nameController.text.trim()
+                                         );
 
 
                                         }
@@ -199,7 +225,7 @@ class AuthPage extends ConsumerWidget {
 
 
                                   },
-                                  child: const Text("Submit")),
+                                  child:auth.isLoad ? CircularProgressIndicator(): const Text("Submit")),
                             )
                           ],
                         )),
