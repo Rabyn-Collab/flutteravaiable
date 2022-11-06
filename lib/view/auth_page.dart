@@ -1,10 +1,9 @@
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
-
+import '../common/snack_show.dart';
 import '../providers/common_provider.dart';
 import '../providers/firebase_auth_provider.dart';
 
@@ -19,12 +18,8 @@ class AuthPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     ref.listen(authProvider, (previous, next) {
-      print(next.err);
      if(next.err != ''){
-       ScaffoldMessenger.of(context).hideCurrentSnackBar();
-       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-           duration: Duration(seconds: 1),
-           content: Text(next.err)));
+     SnackShow.showFailureSnack(context, next.err);
      }
     });
 
@@ -39,19 +34,48 @@ class AuthPage extends ConsumerWidget {
           resizeToAvoidBottomInset: false,
           body: Stack(
             children: [
-              Container(
-                width: double.infinity,
-                height: deviceHeight * 0.33,
-                color: const Color(0xff4252B5),
-                child: Align(
-                    alignment: Alignment.topCenter,
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: deviceHeight * 0.33,
+                    color: const Color(0xff4252B5),
+                    child: Align(
+                        alignment: Alignment.topCenter,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 30.0),
+                          child: Image.asset(
+                            'assets/images/firebase.png',
+                            height: deviceHeight * 0.1,
+                          ),
+                        )),
+                  ),
+                  Container(
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 30.0),
-                      child: Image.asset(
-                        'assets/images/firebase.png',
-                        height: deviceHeight * 0.1,
+                      padding: const EdgeInsets.only(bottom: 20.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            isLogin  ? 'Don\'t Have a Account': 'Already have an account',
+                            style: TextStyle(fontSize: 18),
+                          ),
+                          TextButton(
+                              onPressed: () {
+                                _form.currentState!.reset();
+
+                                ref.read(loginProvider.notifier).toggle();
+                              },
+                              child:  Text(
+                                isLogin  ?  "Sign Up" : 'Login',
+                                style: TextStyle(fontSize: 18),
+                              ))
+                        ],
                       ),
-                    )),
+                    ),
+                  )
+                ],
               ),
               Positioned(
                   right: width * 0.08,
@@ -232,30 +256,7 @@ class AuthPage extends ConsumerWidget {
                       ),
                     ),
                   )),
-              Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 20.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                         Text(
-                          isLogin  ? 'Don\'t Have a Account': 'Already have an account',
-                          style: TextStyle(fontSize: 18),
-                        ),
-                        TextButton(
-                            onPressed: () {
-                              _form.currentState!.reset();
 
-                              ref.read(loginProvider.notifier).toggle();
-                            },
-                            child:  Text(
-                              isLogin  ?  "Sign Up" : 'Login',
-                              style: TextStyle(fontSize: 18),
-                            ))
-                      ],
-                    ),
-                  )),
             ],
           )),
     );

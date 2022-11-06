@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttersamplestart/providers/firebase_auth_provider.dart';
+import 'package:fluttersamplestart/view/auth_page.dart';
+import 'package:fluttersamplestart/view/home_page.dart';
 
 
 
@@ -11,7 +15,23 @@ class StatusPage extends StatelessWidget {
   Widget build(BuildContext context) {
     FlutterNativeSplash.remove();
     return Scaffold(
-        body: Container()
+        body: Consumer(
+            builder: (context, ref, child) {
+              final userData = ref.watch(userStream);
+              return userData.when(
+                  data: (data){
+                    if(data == null){
+                      return AuthPage();
+                    }else{
+                      return HomePage();
+                    }
+
+                  },
+                  error: (err, stack) => Center(child: Text('$err')),
+                  loading: () => Center(child: CircularProgressIndicator())
+              );
+            }
+    )
     );
   }
 }
