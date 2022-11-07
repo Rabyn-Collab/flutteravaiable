@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttersamplestart/providers/firebase_auth_provider.dart';
+import 'package:fluttersamplestart/view/create_page.dart';
+import 'package:get/get.dart';
 
 import '../providers/fire_instances.dart';
 
@@ -36,6 +38,14 @@ class HomePage extends ConsumerWidget {
                       },
                       leading: Icon(Icons.mail),
                       title: Text(data.metadata!['email']),
+                    ),
+                    ListTile(
+                      onTap: (){
+                        Navigator.of(context).pop();
+                        Get.to(() => CreatePage(), transition: Transition.leftToRight);
+                      },
+                      leading: Icon(Icons.add_circle),
+                      title: Text('Create Post'),
                     ),
                     ListTile(
                       onTap: (){

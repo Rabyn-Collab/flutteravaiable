@@ -11,5 +11,6 @@ class FireInstances{
   static FirebaseFirestore fireStore = FirebaseFirestore.instance;
   static FirebaseStorage fireStorage = FirebaseStorage.instance;
   static FirebaseChatCore fireChatCore = FirebaseChatCore.instance;
+  static CollectionReference postDb = fireStore.collection('posts');
 
 }
