@@ -13,12 +13,27 @@ class Comment{
    required this.username
 });
 
+  factory Comment.fromJson(Map<String, dynamic> json){
+    return Comment(
+        imageUrl: json['imageUrl'],
+        text: json['text'],
+        username: json['username']
+    );
+  }
+
 }
 
 class Like{
   final int totalLikes;
   final List<String> usernames;
   Like({required this.totalLikes, required this.usernames});
+
+  factory Like.fromJson(Map<String, dynamic> json){
+    return Like(
+     totalLikes: json['totalLikes'],
+      usernames: (json['usernames'] as List).map((e) => e as String).toList()
+    );
+  }
 }
 
 class Post{

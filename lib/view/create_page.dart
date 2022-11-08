@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttersamplestart/providers/fire_crud_providers.dart';
+import 'package:fluttersamplestart/providers/fire_instances.dart';
 import 'package:get/get.dart';
 import '../common/snack_show.dart';
 import '../providers/common_provider.dart';
@@ -20,6 +21,8 @@ class CreatePage extends ConsumerWidget {
     ref.listen(crudProvider, (previous, next) {
       if(next.err != ''){
         SnackShow.showFailureSnack(context, next.err);
+      }else if(next.isSuccess){
+        Navigator.of(context).pop();
       }
     });
 
@@ -86,7 +89,7 @@ class CreatePage extends ConsumerWidget {
                                     }
                                     return null;
                                   },
-                                  isPass: true,
+                                  isPass: false,
                                   controller: detailController,
                                   hintText: 'Detail',
                                   icon: CupertinoIcons.arrow_down_doc
@@ -145,7 +148,6 @@ class CreatePage extends ConsumerWidget {
                                     onPressed: crud.isLoad ? null: () async {
                                       _form.currentState!.save();
                                       if(_form.currentState!.validate()){
-
                                         if(image == null){
                                           Get.defaultDialog(
                                               title: 'required image',
@@ -158,8 +160,12 @@ class CreatePage extends ConsumerWidget {
                                               ]
                                           );
                                         }else{
-
-
+                                         ref.read(crudProvider.notifier).postAdd(
+                                             title: titleController.text.trim(),
+                                             detail: detailController.text.trim(),
+                                             image: image,
+                                             uid: FireInstances.fireAuth.currentUser!.uid
+                                         );
                                         }
                                       }
 
