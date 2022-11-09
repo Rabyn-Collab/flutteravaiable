@@ -5,8 +5,6 @@
 
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fluttersamplestart/providers/fire_instances.dart';
-import 'package:fluttersamplestart/service/firebase_auth_service.dart';
 import 'package:image_picker/image_picker.dart';
 import '../models/auth_state.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
@@ -33,7 +31,7 @@ class CrudProvider extends StateNotifier<PostState> {
         required XFile image,
         required String uid,
       }) async {
-    state = state.copyWith(postState: state, isLoad: true, err: '');
+    state = state.copyWith(postState: state, isLoad: true, err: '', isSuccess: false);
     final response = await FirebaseCrudService.addPost(title: title, detail: detail, image: image, uid: uid);
     response.fold((l) {
       state = state.copyWith(postState: state, isLoad: false, err: l);
@@ -52,7 +50,7 @@ class CrudProvider extends StateNotifier<PostState> {
         String? imageId,
         required String id,
       }) async {
-    state = state.copyWith(postState: state, isLoad: true, err: '');
+    state = state.copyWith(postState: state, isLoad: true, err: '', isSuccess: false);
     final response = await FirebaseCrudService.updatePost(title: title,
       detail: detail, image: image, id: id, imageId: imageId);
     response.fold((l) {
@@ -69,7 +67,7 @@ class CrudProvider extends StateNotifier<PostState> {
        required String imageId,
         required String id,
       }) async {
-    state = state.copyWith(postState: state, isLoad: true, err: '');
+    state = state.copyWith(postState: state, isLoad: true, err: '', isSuccess: false);
     final response = await FirebaseCrudService.removePost(id: id, imageId: imageId);
     response.fold((l) {
       state = state.copyWith(postState: state, isLoad: false, err: l);
@@ -79,7 +77,18 @@ class CrudProvider extends StateNotifier<PostState> {
   }
 
 
+//add Like
 
+   Future<void> addLike({required String username,
+    required String id, required int likes}) async {
+    state = state.copyWith(postState: state, isLoad: true, err: '', isSuccess: false);
+    final response = await FirebaseCrudService.addLike(id: id, username: username, likes: likes);
+    response.fold((l) {
+      state = state.copyWith(postState: state, isLoad: false, err: l);
+    }, (r) {
+      state = state.copyWith(postState: state, isLoad: false, err: '', isSuccess: r);
+    });
+  }
 
 
 }

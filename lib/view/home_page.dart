@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttersamplestart/common/snack_show.dart';
 import 'package:fluttersamplestart/providers/fire_instances.dart';
 import 'package:fluttersamplestart/providers/firebase_auth_provider.dart';
 import 'package:fluttersamplestart/service/firebase_crud_service.dart';
 import 'package:fluttersamplestart/view/create_page.dart';
+import 'package:fluttersamplestart/view/edit_page.dart';
 import 'package:get/get.dart';
+
+import '../providers/fire_crud_providers.dart';
 
 
 
@@ -13,6 +17,7 @@ import 'package:get/get.dart';
 class HomePage extends ConsumerWidget {
 
   final uid = FireInstances.fireAuth.currentUser!.uid;
+  late String userName;
 
   @override
   Widget build(BuildContext context, ref) {
@@ -26,6 +31,7 @@ class HomePage extends ConsumerWidget {
         drawer: Drawer(
           child: userData.when(
               data: (data){
+                userName = data.firstName!;
                 return ListView(
                   children: [
                     DrawerHeader(
@@ -121,13 +127,56 @@ class HomePage extends ConsumerWidget {
                                               padding: EdgeInsets.zero,
                                                 tapTargetSize: MaterialTapTargetSize.shrinkWrap
                                             ),
-                                            onPressed: (){}, icon: Icon(Icons.more_horiz))
+                                            onPressed: (){
+                                              Get.defaultDialog(
+                                                title: 'Customze',
+                                                content: Text('edit or update post'),
+                                                actions: [
+                                                  TextButton(
+                                                      onPressed: (){
+                                                        SnackShow.popIt(context);
+                                                        Get.to(() => EditPage(data[index]), transition: Transition.leftToRight);
+                                                      },
+                                                      child: Text('Edit')
+                                                  ),
+                                                  TextButton(
+                                                      onPressed: (){
+                                                        SnackShow.popIt(context);
+                                                      },
+                                                      child: Text('remove')),
+                                                  TextButton(
+                                                      onPressed: (){
+                                                        SnackShow.popIt(context);
+                                                      },
+                                                      child: Text('cancel')),
+                                                ]
+                                              );
+                                            }, icon: Icon(Icons.more_horiz))
                                       ],
                                     ),
                                     SizedBox(height: 20,),
                                     Image.network(data[index].imageUrl, fit: BoxFit.cover, height: 300, width: double.infinity,),
                                     SizedBox(height: 20,),
-                                    Text(data[index].detail, overflow: TextOverflow.ellipsis,)
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(child: Text(data[index].detail, overflow: TextOverflow.ellipsis,)),
+                                        if(uid != data[index].uid) Row(
+                                          children: [
+                                            IconButton(onPressed: (){
+                                              if(data[index].like.usernames.contains(userName)){
+                                                SnackShow.showCommonSnack(context, 'you have already like this post');
+                                              }else{
+                                                ref.read(crudProvider.notifier).addLike(
+                                                    username: userName, id: data[index].id, likes: data[index].like.totalLikes);
+                                              }
+
+                                            }, icon: Icon(Icons.thumb_up)),
+                                            if(data[index].like.totalLikes > 0) Text('${data[index].like.totalLikes}')
+                                          ],
+                                        )
+                                      ],
+                                    )
                                   ],
                                 ),
                               ),

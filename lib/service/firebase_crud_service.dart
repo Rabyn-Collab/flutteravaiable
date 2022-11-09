@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -37,8 +38,6 @@ class FirebaseCrudService {
       },
         'imageId': imageId
       });
-     print(response);
-
       return Right(true);
     } on FirebaseException catch (err) {
       return Left(AuthExceptionHandler.handleException(err));
@@ -123,6 +122,24 @@ class FirebaseCrudService {
   }
 
 
+
+
+  static Future<Either<String, bool>> addLike({required String username,
+    required String id, required int likes}) async {
+    try {
+
+        final response = await FireInstances.postDb.doc(id).update({
+          'like':{
+            'totalLikes': likes + 1,
+            'usernames':  FieldValue.arrayUnion([username])
+          },
+        });
+
+      return Right(true);
+    } on FirebaseException catch (err) {
+      return Left(AuthExceptionHandler.handleException(err));
+    }
+  }
 
 
 }
