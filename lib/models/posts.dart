@@ -21,6 +21,15 @@ class Comment{
     );
   }
 
+  Map<String, dynamic> toJson(){
+    return {
+      'imageUrl': this.imageUrl,
+      'text': this.text,
+      'username': this.username
+    };
+
+  }
+
 }
 
 class Like{

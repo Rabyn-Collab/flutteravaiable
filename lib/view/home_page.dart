@@ -5,9 +5,11 @@ import 'package:fluttersamplestart/providers/fire_instances.dart';
 import 'package:fluttersamplestart/providers/firebase_auth_provider.dart';
 import 'package:fluttersamplestart/service/firebase_crud_service.dart';
 import 'package:fluttersamplestart/view/create_page.dart';
+import 'package:fluttersamplestart/view/detail_page.dart';
 import 'package:fluttersamplestart/view/edit_page.dart';
+import 'package:fluttersamplestart/view/user_detail.dart';
 import 'package:get/get.dart';
-
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import '../providers/fire_crud_providers.dart';
 
 
@@ -18,6 +20,7 @@ class HomePage extends ConsumerWidget {
 
   final uid = FireInstances.fireAuth.currentUser!.uid;
   late String userName;
+  late types.User user;
 
   @override
   Widget build(BuildContext context, ref) {
@@ -32,6 +35,7 @@ class HomePage extends ConsumerWidget {
           child: userData.when(
               data: (data){
                 userName = data.firstName!;
+                user = data;
                 return ListView(
                   children: [
                     DrawerHeader(
@@ -84,15 +88,20 @@ class HomePage extends ConsumerWidget {
                         itemBuilder: (context, index){
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            children: [
-                              CircleAvatar(
-                                radius: 36,
-                                 backgroundImage: NetworkImage( data[index].imageUrl!),
-                                 ),
-                              SizedBox(height: 10,),
-                              Text(data[index].firstName!)
-                            ],
+                          child: InkWell(
+                            onTap: (){
+                              Get.to(() => UserDetail(data[index]), transition:  Transition.leftToRight);
+                            },
+                            child: Column(
+                              children: [
+                                CircleAvatar(
+                                  radius: 36,
+                                   backgroundImage: NetworkImage( data[index].imageUrl!),
+                                   ),
+                                SizedBox(height: 10,),
+                                Text(data[index].firstName!)
+                              ],
+                            ),
                           ),
                         );
                         }
@@ -155,7 +164,11 @@ class HomePage extends ConsumerWidget {
                                       ],
                                     ),
                                     SizedBox(height: 20,),
-                                    Image.network(data[index].imageUrl, fit: BoxFit.cover, height: 300, width: double.infinity,),
+                                    GestureDetector(
+                                        onTap: (){
+                                          Get.to(() => DetailPage(data[index], user), transition: Transition.leftToRight);
+                                        },
+                                        child: Image.network(data[index].imageUrl, fit: BoxFit.cover, height: 300, width: double.infinity,)),
                                     SizedBox(height: 20,),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttersamplestart/providers/fire_instances.dart';
@@ -10,6 +9,8 @@ import '../exceptions/firebase_exception.dart';
 import '../models/posts.dart';
 
 final postStream = StreamProvider((ref) => FirebaseCrudService.streamPost);
+final singlePostStream = StreamProvider.family((ref, String id) => FirebaseCrudService.streamSinglePost(id));
+final userPostStream = StreamProvider.family((ref, String id) => FirebaseCrudService.userStreamPost(id));
 
 
 class FirebaseCrudService {
@@ -140,6 +141,69 @@ class FirebaseCrudService {
       return Left(AuthExceptionHandler.handleException(err));
     }
   }
+
+
+  static Future<Either<String, bool>> addComment({required Comment comment,
+    required String id}) async {
+    try {
+
+      final response = await FireInstances.postDb.doc(id).update({
+        'comments':FieldValue.arrayUnion([comment.toJson()]),
+      });
+      return Right(true);
+    } on FirebaseException catch (err) {
+      return Left(AuthExceptionHandler.handleException(err));
+    }
+  }
+
+
+  static Stream<Post>  streamSinglePost (String postId) {
+    try {
+      final data = FireInstances.postDb.doc(postId).snapshots();
+      return data.map((e) {
+        final json = e.data() as Map<String, dynamic>;
+        return  Post(
+            imageUrl: json['imageUrl'],
+            uid: json['uid'],
+            id: e.id,
+            comments: (json['comments'] as List).map((e) => Comment.fromJson(e)).toList(),
+            detail: json['detail'],
+            like: Like.fromJson(json['like']),
+            title: json['title'],
+            imageId: json['imageId']
+        );
+      });
+
+    } on FirebaseAuthException catch (err) {
+      throw AuthExceptionHandler.handleException(err);
+    }
+  }
+
+
+
+
+  static Stream<List<Post>>  userStreamPost(String uid) {
+    try {
+      final data = FireInstances.postDb.where('uid', isEqualTo: uid).snapshots();
+      return data.map((event) => event.docs.map((e) {
+        final json = e.data() as Map<String, dynamic>;
+        return Post(
+            imageUrl: json['imageUrl'],
+            uid: json['uid'],
+            id: e.id,
+            comments: (json['comments'] as List).map((e) => Comment.fromJson(e)).toList(),
+            detail: json['detail'],
+            like: Like.fromJson(json['like']),
+            title: json['title'],
+            imageId: json['imageId']
+        );
+      }).toList());
+    } on FirebaseAuthException catch (err) {
+      throw AuthExceptionHandler.handleException(err);
+    }
+  }
+
+
 
 
 }
