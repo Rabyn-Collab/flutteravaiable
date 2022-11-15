@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttersamplestart/providers/common_provider.dart';
 import 'package:fluttersamplestart/providers/room_provider.dart';
 import 'package:fluttersamplestart/service/firebase_crud_service.dart';
 import 'package:fluttersamplestart/view/chat_page.dart';
@@ -36,9 +37,12 @@ UserDetail(this.user);
                         Text(user.metadata!['email']),
                         Consumer(
                           builder: (context, ref, child) {
-                            return ElevatedButton(
-                                onPressed: () async{
+                            final isLoad = ref.watch(loadingProvider);
+                            return  ElevatedButton(
+                                onPressed: isLoad ? null : () async{
+                                  ref.read(loadingProvider.notifier).toggle();
                                     final response = await ref.read(roomProvider).roomCreate(user);
+                                  ref.read(loadingProvider.notifier).toggle();
                                     if(response != null){
                                       Get.to(() => ChatPage(response), transition: Transition.leftToRight);
                                     }

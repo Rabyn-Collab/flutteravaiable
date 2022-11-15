@@ -16,6 +16,19 @@ class ToggleProvider extends StateNotifier<bool>{
 
 }
 
+final loadingProvider = StateNotifierProvider<LoadingProvider, bool>(
+        (ref) => LoadingProvider(false));
+
+
+class LoadingProvider extends StateNotifier<bool>{
+  LoadingProvider(super.state);
+
+  void toggle(){
+    state = !state;
+  }
+
+}
+
 
 
 final imageProvider = StateNotifierProvider.autoDispose<ImageProvider, XFile?>(

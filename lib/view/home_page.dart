@@ -11,6 +11,7 @@ import 'package:fluttersamplestart/view/user_detail.dart';
 import 'package:get/get.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import '../providers/fire_crud_providers.dart';
+import 'friend_page.dart';
 
 
 
@@ -52,6 +53,14 @@ class HomePage extends ConsumerWidget {
                       },
                       leading: Icon(Icons.mail),
                       title: Text(data.metadata!['email']),
+                    ),
+                    ListTile(
+                      onTap: (){
+                        Navigator.of(context).pop();
+                        Get.to(() => FriendPage(), transition: Transition.leftToRight);
+                      },
+                      leading: Icon(Icons.message),
+                      title: Text('Recent Chats'),
                     ),
                     ListTile(
                       onTap: (){
