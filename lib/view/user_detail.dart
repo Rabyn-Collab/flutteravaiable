@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttersamplestart/providers/room_provider.dart';
 import 'package:fluttersamplestart/service/firebase_crud_service.dart';
+import 'package:fluttersamplestart/view/chat_page.dart';
+import 'package:get/get.dart';
 
 
 class UserDetail extends StatelessWidget {
@@ -31,7 +34,18 @@ UserDetail(this.user);
                       children: [
                         Text(user.firstName!),
                         Text(user.metadata!['email']),
-                        ElevatedButton(onPressed: (){}, child: Text('Chat'))
+                        Consumer(
+                          builder: (context, ref, child) {
+                            return ElevatedButton(
+                                onPressed: () async{
+                                    final response = await ref.read(roomProvider).roomCreate(user);
+                                    if(response != null){
+                                      Get.to(() => ChatPage(response), transition: Transition.leftToRight);
+                                    }
+                                }, child: Text('Chat')
+                            );
+                          }
+                        )
                       ],
                     ),
                   )
