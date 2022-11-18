@@ -3,7 +3,7 @@ import 'package:image_picker/image_picker.dart';
 
 
 
-final loginProvider = StateNotifierProvider<ToggleProvider, bool>(
+final loginProvider = StateNotifierProvider.autoDispose<ToggleProvider, bool>(
         (ref) => ToggleProvider(true));
 
 

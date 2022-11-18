@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_types/flutter_chat_types.dart';
@@ -8,12 +9,14 @@ import 'package:fluttersamplestart/providers/fire_instances.dart';
 import 'package:fluttersamplestart/providers/room_provider.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:dio/dio.dart';
 import '../providers/common_provider.dart';
 
 class ChatPage extends StatelessWidget {
   final types.Room room;
-  ChatPage(this.room);
+  final String token;
+  final String name;
+  ChatPage(this.room, this.token, this.name);
 
   @override
   Widget build(BuildContext context) {
@@ -62,11 +65,33 @@ class ChatPage extends StatelessWidget {
 
 
                        },
-                     onSendPressed: (PartialText  message) {
+                     onSendPressed: (PartialText  message) async{
                        FireInstances.fireChatCore.sendMessage(
                          message,
                          room.id,
                        );
+                       final dio = Dio();
+                       try{
+                         final response = await dio.post('https://fcm.googleapis.com/fcm/send',
+                             data: {
+                               "notification": {
+                                 "title": name,
+                                 "body": message.text,
+                                 "android_channel_id": "High_importance_channel"
+                               },
+                               "to": token
+
+                             }, options: Options(
+                                 headers: {
+                                   HttpHeaders.authorizationHeader : 'key=AAAAVbRrRuw:APA91bGtG4BJVQj_iEO-v3-6-7ChYkOeWT-PexWj0f0em6aHerNaS9DyGgLQw5qkaICjjB85ABZpOOv_KveL5RZm2ZsRe4Ou59OGRslszg0V5ePUaL6iivIiM8pigHKkXCuLzQbJR5dP'
+                                 }
+                             )
+                         );
+                         print(response.data);
+
+                       }on FirebaseException catch (err){
+                         print(err);
+                       }
                      }, user: types.User(
                      id: FireInstances.fireChatCore.firebaseUser!.uid
                    )

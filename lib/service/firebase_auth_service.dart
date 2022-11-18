@@ -5,7 +5,7 @@ import 'package:fluttersamplestart/providers/fire_instances.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:dartz/dartz.dart';
 import '../exceptions/firebase_exception.dart';
-
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class FirebaseAuthService {
 
@@ -24,13 +24,17 @@ class FirebaseAuthService {
         email: email,
         password: password,
       );
-
+      final response = await FirebaseMessaging.instance.getToken();
       await FireInstances.fireChatCore.createUserInFirestore(
         types.User(
             firstName: username,
             id: credential.user!.uid, // UID from Firebase Authentication
             imageUrl: imageUrl,
-            metadata: {'email': email}),
+            metadata: {
+              'email': email,
+              'token': response
+            }
+            ),
       );
       return Right(credential.user!);
     } on FirebaseAuthException catch (err) {
@@ -41,11 +45,21 @@ class FirebaseAuthService {
 
  static Future<Either<String, User>> userLogin({required String email,required String password}) async {
    try {
+
+     final  userDb = FireInstances.fireStore.collection('users');
      UserCredential credential =
      await FireInstances.fireAuth.signInWithEmailAndPassword(
        email: email,
        password: password,
      );
+     final response = await FirebaseMessaging.instance.getToken();
+     await userDb.doc(credential.user!.uid).update({
+       'metadata': {
+         'email': email,
+         'token': response
+       }
+     });
+
 
      return Right(credential.user!);
    } on FirebaseAuthException catch (err) {

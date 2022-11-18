@@ -1,13 +1,33 @@
 import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttersamplestart/notification_service.dart';
 import 'package:fluttersamplestart/view/status_page.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'firebase_options.dart';
 
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
 
+}
+
+
+const AndroidNotificationChannel channel =  AndroidNotificationChannel(
+  "High_importance_channel",
+  "High_importance_channel",
+  importance: Importance.high,
+);
+
+
+
+const InitializationSettings initializationSettings =
+InitializationSettings(
+  android: AndroidInitializationSettings("@mipmap/ic_launcher"),
+);
 
 
 void main() async{
@@ -20,6 +40,15 @@ void main() async{
   //   statusBarColor: Color(0xFFF2F5F9)
   // ));
   runApp(ProviderScope(child: Home()));
+
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  await LocalNotificationService.notificationsPlugin
+      .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
+  LocalNotificationService.notificationsPlugin.initialize(
+    initializationSettings,
+  );
+
 }
 
 

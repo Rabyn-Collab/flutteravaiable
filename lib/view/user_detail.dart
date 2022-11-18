@@ -44,7 +44,7 @@ UserDetail(this.user);
                                     final response = await ref.read(roomProvider).roomCreate(user);
                                   ref.read(loadingProvider.notifier).toggle();
                                     if(response != null){
-                                      Get.to(() => ChatPage(response), transition: Transition.leftToRight);
+                                      Get.to(() => ChatPage(response, user.metadata!['token'], user.firstName!), transition: Transition.leftToRight);
                                     }
                                 }, child: Text('Chat')
                             );
@@ -77,7 +77,7 @@ UserDetail(this.user);
                          );
                         },
                         error: (err, stack) => Text('$err') ,
-                        loading: () => CircularProgressIndicator()
+                        loading: () => Center(child: CircularProgressIndicator())
                     ) ;
                   }
               ),
