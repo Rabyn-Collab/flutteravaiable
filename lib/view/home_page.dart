@@ -57,19 +57,19 @@ class _HomePageState extends ConsumerState<HomePage> {
       },
     );
 
-    // 2. This method only call when App in foreground it mean app must be opened
-    FirebaseMessaging.onMessage.listen(
-          (message) {
-        print("FirebaseMessaging.onMessage.listen");
-        if (message.notification != null) {
-          // print(message.notification!.title);
-          // print(message.notification!.body);
-          // print("message.data11 ${message.data}");
-          LocalNotificationService.createanddisplaynotification(message);
-
-        }
-      },
-    );
+    // // 2. This method only call when App in foreground it mean app must be opened
+    // FirebaseMessaging.onMessage.listen(
+    //       (message) {
+    //     print("FirebaseMessaging.onMessage.listen");
+    //     if (message.notification != null) {
+    //       // print(message.notification!.title);
+    //       // print(message.notification!.body);
+    //       // print("message.data11 ${message.data}");
+    //       LocalNotificationService.createanddisplaynotification(message);
+    //
+    //     }
+    //   },
+    // );
 
     // 3. This method only call when App in background and not terminated(not closed)
     FirebaseMessaging.onMessageOpenedApp.listen(
@@ -84,7 +84,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       },
     );
 
-     getToken();
+
 
     super.initState();
   }
