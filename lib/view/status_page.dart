@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttersamplestart/view/login_page.dart';
 
 
 
@@ -15,7 +16,7 @@ class StatusPage extends StatelessWidget {
     return Scaffold(
         body: Consumer(
             builder: (context, ref, child) {
-              return Container();
+              return LoginPage();
             }
     )
     );
