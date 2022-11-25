@@ -1,12 +1,20 @@
+import 'package:hive/hive.dart';
 
+part 'user.g.dart';
 
+@HiveType(typeId: 0)
+class User extends HiveObject{
 
-class User{
-
+  @HiveField(0)
   final String username;
 
+  @HiveField(1)
   final String email;
+
+  @HiveField(2)
   final String token;
+
+  @HiveField(3)
   final String id;
 
 
@@ -17,6 +25,15 @@ class User{
     required this.token
 });
 
+
+  factory User.empty(){
+    return User(
+        id: '',
+        username: '',
+        email:'',
+        token: ''
+    );
+  }
 
   factory User.fromJson(Map<String, dynamic> json){
     return User(

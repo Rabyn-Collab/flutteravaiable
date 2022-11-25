@@ -1,19 +1,31 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttersamplestart/models/user.dart';
 import 'package:fluttersamplestart/view/status_page.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+
+final boxA = Provider<List<User>>((ref) => []);
+
 
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Future.delayed(Duration(milliseconds: 500));
+  await Hive.initFlutter();
+  Hive.registerAdapter(UserAdapter());
+final userBox = await Hive.openBox<User>('user');
 
   // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
   //   statusBarColor: Color(0xFFF2F5F9)
   // ));
-  runApp(ProviderScope(child: Home()));
+  runApp(ProviderScope(
+      overrides: [
+        boxA.overrideWithValue(userBox.values.toList().cast<User>())
+      ],
+      child: Home()));
 }
 
 

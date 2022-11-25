@@ -3,10 +3,7 @@
 
 class Api{
 
-  static const String baseUrl = 'https://api.themoviedb.org/3';
-  static const String getPopularMovie = '$baseUrl/movie/popular';
-  static const String getTopRatedMovie = '$baseUrl/movie/top_rated';
-  static const String getUpcomingMovie = '$baseUrl/movie/upcoming';
-  static const String getSearchMovie = '$baseUrl/search/movie';
-  static const String getVideoKey = '$baseUrl/movie';
+  static const String baseUrl = 'http://192.168.0.105:3000';
+  static const String login = '$baseUrl/api/userLogin';
+  static const String signUp = '$baseUrl/api/userSignUp';
 }

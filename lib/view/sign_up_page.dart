@@ -20,6 +20,8 @@ class SignUpPage extends ConsumerWidget {
     ref.listen(authProvider, (previous, next) {
      if(next.err != ''){
      SnackShow.showFailureSnack(context, next.err);
+     }else if(next.isSuccess){
+       Get.back();
      }
     });
 
