@@ -41,14 +41,14 @@ class AuthProvider extends StateNotifier<AuthState> {
       state = state.copyWith(isLoad: false, err: l);
     }, (r) {
       Hive.box<User>('user').add(r);
-      state = state.copyWith(isLoad: false, err: '', user: [r]);
+      state = state.copyWith(isLoad: false, err: '', user: []);
     });
   }
 
 
-  // Future<void> userLogOut() async {
-  //    await FireInstances.fireAuth.signOut();
-  // }
+  void userLogOut() async {
+    Hive.box<User>('user').clear();
+  }
 
 
 

@@ -5,79 +5,86 @@ import 'package:fluttersamplestart/view/sign_up_page.dart';
 import '../common/snack_show.dart';
 import '../providers/auth_provider.dart';
 import 'package:get/get.dart';
+import 'package:flutter/services.dart';
 
-class LoginPage extends ConsumerWidget {
-   LoginPage({Key? key}) : super(key: key);
+class LoginPage extends ConsumerStatefulWidget {
+  const LoginPage({Key? key}) : super(key: key);
 
+  @override
+  ConsumerState<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends ConsumerState<LoginPage> {
   final _form = GlobalKey<FormState>();
   final passController = TextEditingController();
   final mailController = TextEditingController();
 
+
   @override
-  Widget build(BuildContext context, ref) {
+  Widget build(BuildContext context) {
+    final auth = ref.watch(authProvider);
     ref.listen(authProvider, (previous, next) {
      if(next.err != ''){
      SnackShow.showFailureSnack(context, next.err);
      }
     });
-
     final deviceHeight =
         MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
     final width = MediaQuery.of(context).size.width;
-    final auth = ref.watch(authProvider);
+
     return SafeArea(
       child: Scaffold(
           resizeToAvoidBottomInset: false,
-          body: Stack(
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: double.infinity,
-                    height: deviceHeight * 0.33,
-                    color: Colors.grey[290],
-                    child: Align(
-                        alignment: Alignment.topCenter,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 30.0),
-                          child: Image.asset(
-                            'assets/images/shop.png',
-                            height: deviceHeight * 0.1,
-                          ),
-                        )),
-                  ),
-                  Container(
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 20.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                             'Don\'t Have a Account',
-                            style: TextStyle(fontSize: 18),
-                          ),
-                          TextButton(
-                              onPressed: () {
-                                _form.currentState!.reset();
-                                Get.to(() => SignUpPage(), transition:  Transition.leftToRight);
-                              },
-                              child:  Text(
-                                "Sign Up",
-                                style: TextStyle(fontSize: 18),
-                              ))
-                        ],
-                      ),
+          body: Form(
+            key: _form,
+            child: Stack(
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      height: deviceHeight * 0.33,
+                      color: Colors.grey[290],
+                      child: Align(
+                          alignment: Alignment.topCenter,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 30.0),
+                            child: Image.asset(
+                              'assets/images/shop.png',
+                              height: deviceHeight * 0.1,
+                            ),
+                          )),
                     ),
-                  )
-                ],
-              ),
-              Positioned(
-                  right: width * 0.08,
-                  left: width * 0.08,
-                  top: deviceHeight * 0.21,
-                  child: Form(
-                    key: _form,
+                    Container(
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 20.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                               'Don\'t Have a Account',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                            TextButton(
+                                onPressed: () {
+                                  _form.currentState!.reset();
+                                  Get.to(() => SignUpPage(), transition:  Transition.leftToRight);
+                                },
+                                child:  Text(
+                                  "Sign Up",
+                                  style: TextStyle(fontSize: 18),
+                                ))
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                Positioned(
+                    right: width * 0.08,
+                    left: width * 0.08,
+                    top: deviceHeight * 0.21,
                     child: Card(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15.0),
@@ -139,7 +146,6 @@ class LoginPage extends ConsumerWidget {
                               ),
                             ),
 
-
                             const SizedBox(
                               height: 10,
                             ),
@@ -154,9 +160,9 @@ class LoginPage extends ConsumerWidget {
                                     backgroundColor: const Color(0xff4252B5),
                                   ),
                                   onPressed: auth.isLoad ? null: () async {
+                                    SystemChannels.textInput.invokeMethod('TextInput.hide');
                                     _form.currentState!.save();
                                     if(_form.currentState!.validate()) {
-                                      //login method
                                       await ref.read(authProvider.notifier)
                                           .userLogin(
                                         email: mailController.text.trim(),
@@ -169,10 +175,10 @@ class LoginPage extends ConsumerWidget {
                           ],
                         )),
                       ),
-                    ),
-                  )),
+                    )),
 
-            ],
+              ],
+            ),
           )),
     );
   }
