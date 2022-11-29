@@ -17,6 +17,20 @@ class LoadingProvider extends StateNotifier<bool>{
 }
 
 
+final indexProvider = StateNotifierProvider<IndexProvider, int>(
+        (ref) => IndexProvider(0));
+
+
+class IndexProvider extends StateNotifier<int>{
+  IndexProvider(super.state);
+
+  void change(int index){
+    state = index;
+  }
+
+}
+
+
 
 final imageProvider = StateNotifierProvider.autoDispose<ImageProvider, XFile?>(
         (ref) => ImageProvider(null));

@@ -41,7 +41,7 @@ class AuthProvider extends StateNotifier<AuthState> {
       state = state.copyWith(isLoad: false, err: l);
     }, (r) {
       Hive.box<User>('user').add(r);
-      state = state.copyWith(isLoad: false, err: '', user: []);
+      state = state.copyWith(isLoad: false, err: '', user: [r]);
     });
   }
 

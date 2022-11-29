@@ -1,48 +1,41 @@
-//
-//
-//
-//
-//
-// import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
-// import 'package:flutter_riverpod/flutter_riverpod.dart';
-// import 'package:fluttersamplestart/models/posts.dart';
-// import 'package:image_picker/image_picker.dart';
-// import '../models/auth_state.dart';
-// import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
-//
-// import '../models/post_state.dart';
-// import '../service/firebase_crud_service.dart';
-//
-//
-//
-//
-//
-//
-// final crudProvider = StateNotifierProvider<CrudProvider, PostState>(
-//         (ref) => CrudProvider(PostState(isSuccess: false, err: '', isLoad: false)));
-//
-// class CrudProvider extends StateNotifier<PostState> {
-//   CrudProvider(super.state);
-//
-//   // add post
-//   Future<void> postAdd(
-//       {
-//         required String title,
-//         required String detail,
-//         required XFile image,
-//         required String uid,
-//       }) async {
-//     state = state.copyWith(postState: state, isLoad: true, err: '', isSuccess: false);
-//     final response = await FirebaseCrudService.addPost(title: title, detail: detail, image: image, uid: uid);
-//     response.fold((l) {
-//       state = state.copyWith(postState: state, isLoad: false, err: l);
-//     }, (r) {
-//       state = state.copyWith(postState: state, isLoad: false, err: '', isSuccess: r);
-//     });
-//   }
-//
-//
-// //update post
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttersamplestart/providers/auth_provider.dart';
+import 'package:image_picker/image_picker.dart';
+import '../models/product_state.dart';
+import '../service/crud_service.dart';
+
+
+
+final crudProvider = StateNotifierProvider<CrudProvider, ProductState>(
+        (ref) => CrudProvider(ProductState.initState(), ref));
+
+class CrudProvider extends StateNotifier<ProductState> {
+
+  final StateNotifierProviderRef ref;
+  CrudProvider(super.state, this.ref);
+
+
+
+
+  Future<void> productAdd(
+      {
+        required String title,
+        required String detail,
+        required XFile image,
+        required int price ,
+      }) async {
+    final auth = ref.watch(authProvider);
+    state = state.copyWith( isLoad: true, err: '', isSuccess: false);
+    final response = await CrudService.addProduct(title: title, detail: detail, price: price, image: image, token:auth.user[0].token );
+    response.fold((l) {
+      state = state.copyWith( isLoad: false, err: l, isSuccess: false);
+    }, (r) {
+      state = state.copyWith(isLoad: false, err: '', isSuccess: r);
+    });
+  }
+
+
+//update post
 //   Future<void> updatePost(
 //       {
 //         required String title,
@@ -60,9 +53,9 @@
 //       state = state.copyWith(postState: state, isLoad: false, err: '', isSuccess: r);
 //     });
 //   }
-//
-//
-// //remove post
+
+
+//remove post
 //   Future<void> removePost(
 //       {
 //        required String imageId,
@@ -76,35 +69,11 @@
 //       state = state.copyWith(postState: state, isLoad: false, err: '', isSuccess: r);
 //     });
 //   }
-//
-//
-// //add Like
-//
-//    Future<void> addLike({required String username,
-//     required String id, required int likes}) async {
-//     state = state.copyWith(postState: state, isLoad: true, err: '', isSuccess: false);
-//     final response = await FirebaseCrudService.addLike(id: id, username: username, likes: likes);
-//     response.fold((l) {
-//       state = state.copyWith(postState: state, isLoad: false, err: l);
-//     }, (r) {
-//       state = state.copyWith(postState: state, isLoad: false, err: '', isSuccess: r);
-//     });
-//   }
-//
-//
-//
-//   //add comment
-//
-//   Future<void> addComment({required Comment comment,
-//     required String id}) async {
-//     state = state.copyWith(postState: state, isLoad: true, err: '', isSuccess: false);
-//     final response = await FirebaseCrudService.addComment(id: id, comment: comment);
-//     response.fold((l) {
-//       state = state.copyWith(postState: state, isLoad: false, err: l);
-//     }, (r) {
-//       state = state.copyWith(postState: state, isLoad: false, err: '', isSuccess: r);
-//     });
-//   }
-//
-//
-// }
+
+
+
+
+
+
+
+}
