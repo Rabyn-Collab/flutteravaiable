@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttersamplestart/providers/crud_providers.dart';
+import 'package:fluttersamplestart/view/edit_page.dart';
+import 'package:get/get.dart';
 
 import '../service/crud_service.dart';
 
@@ -30,8 +33,13 @@ class CrudPage extends ConsumerWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                           IconButton(onPressed: (){}, icon: Icon(Icons.edit)),
-                           IconButton(onPressed: (){}, icon: Icon(Icons.delete)),
+                           IconButton(onPressed: (){
+                             Get.to(() => EditPage(data[index]), transition: Transition.leftToRight);
+                           }, icon: Icon(Icons.edit)),
+                           IconButton(
+                               onPressed: () async{
+                            await ref.read(crudProvider.notifier).removeProduct(imageId: data[index].imageId, id: data[index].id);
+                           }, icon: Icon(Icons.delete)),
                           ],
                         ),
                       ),

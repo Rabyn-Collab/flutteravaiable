@@ -15,8 +15,6 @@ class CrudProvider extends StateNotifier<ProductState> {
   CrudProvider(super.state, this.ref);
 
 
-
-
   Future<void> productAdd(
       {
         required String title,
@@ -35,40 +33,43 @@ class CrudProvider extends StateNotifier<ProductState> {
   }
 
 
-//update post
-//   Future<void> updatePost(
-//       {
-//         required String title,
-//         required String detail,
-//         XFile? image,
-//         String? imageId,
-//         required String id,
-//       }) async {
-//     state = state.copyWith(postState: state, isLoad: true, err: '', isSuccess: false);
-//     final response = await FirebaseCrudService.updatePost(title: title,
-//       detail: detail, image: image, id: id, imageId: imageId);
-//     response.fold((l) {
-//       state = state.copyWith(postState: state, isLoad: false, err: l);
-//     }, (r) {
-//       state = state.copyWith(postState: state, isLoad: false, err: '', isSuccess: r);
-//     });
-//   }
+
+  Future<void> updateProduct(
+      {
+        required String title,
+        required String detail,
+        XFile? image,
+        String? imageId,
+        required String id,
+        required int price,
+      }) async {
+    final auth = ref.watch(authProvider);
+    state = state.copyWith(isLoad: true, err: '', isSuccess: false);
+    final response = await CrudService.updateProduct(title: title, detail: detail,
+        id: id, price: price, token: auth.user[0].token, image: image, imageId: imageId);
+    response.fold((l) {
+      state = state.copyWith( isLoad: false, err: l);
+    }, (r) {
+      state = state.copyWith(isLoad: false, err: '', isSuccess: r);
+    });
+  }
 
 
-//remove post
-//   Future<void> removePost(
-//       {
-//        required String imageId,
-//         required String id,
-//       }) async {
-//     state = state.copyWith(postState: state, isLoad: true, err: '', isSuccess: false);
-//     final response = await FirebaseCrudService.removePost(id: id, imageId: imageId);
-//     response.fold((l) {
-//       state = state.copyWith(postState: state, isLoad: false, err: l);
-//     }, (r) {
-//       state = state.copyWith(postState: state, isLoad: false, err: '', isSuccess: r);
-//     });
-//   }
+
+  Future<void> removeProduct(
+      {
+       required String imageId,
+        required String id,
+      }) async {
+    final auth = ref.watch(authProvider);
+    state = state.copyWith(isLoad: true, err: '', isSuccess: false);
+    final response = await CrudService.removeProduct(id: id, imageId: imageId, token: auth.user[0].token);
+    response.fold((l) {
+      state = state.copyWith( isLoad: false, err: l);
+    }, (r) {
+      state = state.copyWith(isLoad: false, err: '', isSuccess: r);
+    });
+  }
 
 
 
