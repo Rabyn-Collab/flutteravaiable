@@ -9,7 +9,7 @@ import '../api.dart';
 import '../models/product.dart';
 import 'package:cloudinary_public/cloudinary_public.dart';
 
-final productData = FutureProvider.autoDispose((ref) => CrudService.getProducts());
+final productData = FutureProvider((ref) => CrudService.getProducts());
 
 class CrudService {
 
@@ -82,12 +82,12 @@ class CrudService {
         );
         await dio.patch('${Api.updateProduct}/$id',
             data:{
-              'photo': 'no need',
               'product_name': title,
               'product_detail': detail,
               'price': price,
-              'public_id': response.secureUrl,
-              'oldImageId': imageId
+              'public_id': response.publicId,
+              'oldImageId': imageId,
+              'photo': response.secureUrl
             },options: Options(
                 headers: {
                   HttpHeaders.authorizationHeader: 'Bearer $token',
@@ -108,7 +108,7 @@ class CrudService {
         required String token
       }) async {
     try {
-      await dio.patch('${Api.removeProduct}/$id',
+      await dio.delete('${Api.removeProduct}/$id',
           data:{
             'public_id': imageId,
           },options: Options(

@@ -180,8 +180,7 @@ class _EditPageState extends ConsumerState<EditPage> {
                                         );
                                       });
                                     },
-                                    child: image != null ? Image.file(File(image.path)):  Center(
-                                        child: Text('please select an image', style: TextStyle(color: Colors.black),)),
+                                    child: image != null ? Image.file(File(image.path)): Image.network(widget.product.image)
                                   ),
                                 ),
                                 const SizedBox(
@@ -249,7 +248,6 @@ class _EditPageState extends ConsumerState<EditPage> {
       controller:  controller,
       validator: valid,
       keyboardType: isPrice == true ? TextInputType.number : TextInputType.text,
-      obscureText: isPass == true  ? true: false,
       decoration: InputDecoration(
         focusedBorder: const UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.black)),
