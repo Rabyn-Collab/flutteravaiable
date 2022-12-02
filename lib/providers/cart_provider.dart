@@ -48,7 +48,7 @@ class CartProvider extends StateNotifier<List<CartItem>>{
 
   void singleAddToCart(CartItem cartItem){
       cartItem.quantity = cartItem.quantity + 1;
-      cartItem.price = (cartItem.quantity + 1) * cartItem.price;
+      cartItem.price = cartItem.quantity * cartItem.price;
       cartItem.save();
       state = [
         for(final cart in state) if(cart.id == cartItem.id) cartItem else cart
