@@ -36,7 +36,7 @@ class _EditPageState extends ConsumerState<EditPage> {
   Widget build(BuildContext context) {
     ref.listen(crudProvider, (previous, next) {
       if(next.err != ''){
-        SnackShow.showFailureSnack(context, next.err);
+        SnackShow.showFailureSnack(context, next.err, false);
       }else if(next.isSuccess){
         Navigator.of(context).pop();
       }

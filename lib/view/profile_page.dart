@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttersamplestart/providers/auth_provider.dart';
+import 'package:get/get.dart';
+
+import 'order_history.dart';
 
 
 
@@ -20,6 +23,13 @@ class ProfilePage extends ConsumerWidget {
           ListTile(
             leading: Icon(Icons.mail),
             title: Text(auth.user[0].email),
+          ),
+          ListTile(
+            onTap: (){
+              Get.to(() => OrderHistory(), transition:  Transition.leftToRight);
+            },
+            leading: Icon(Icons.history),
+            title: Text('order history'),
           ),
           ListTile(
             onTap: (){

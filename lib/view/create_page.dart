@@ -19,7 +19,7 @@ class CreatePage extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     ref.listen(crudProvider, (previous, next) {
       if(next.err != ''){
-        SnackShow.showFailureSnack(context, next.err);
+        SnackShow.showFailureSnack(context, next.err, false);
       }else if(next.isSuccess){
         ref.read(indexProvider.notifier).change(0);
       }

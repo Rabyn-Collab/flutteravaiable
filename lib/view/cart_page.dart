@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttersamplestart/providers/auth_provider.dart';
 
 import '../providers/cart_provider.dart';
+import '../providers/order_providers.dart';
 
 
 
@@ -15,10 +17,11 @@ class CartPage extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     final cartData = ref.watch(cartProvider);
     final totalData = ref.watch(cartProvider.notifier).total;
+    final auth = ref.watch(authProvider);
     return Scaffold(
       body: SafeArea(
         child: Container(
-          child: Column(
+          child: cartData.isEmpty ? Center(child: Text('Add Some')): Column(
             children: [
               Expanded(
                 child: Container(
@@ -71,7 +74,19 @@ class CartPage extends ConsumerWidget {
                         Text('Rs. ${totalData}')
                       ],
                     ),
-                    ElevatedButton(onPressed: (){}, child: Text('CheckOut'))
+                    ElevatedButton(
+                        onPressed: () async{
+
+                        final response =  await ref.read(orderProvider).createOrder(
+                            totalData,
+                            DateTime.now().toString(), cartData, auth.user[0].id, auth.user[0].token);
+                        if(response !='success'){
+
+                        }else{
+                          ref.read(cartProvider.notifier).clear();
+                        }
+
+                    }, child: Text('CheckOut'))
                   ],
                 ),
               )

@@ -9,4 +9,6 @@ class Api{
   static const String addProduct = '$baseUrl/api/create_products';
   static const String updateProduct = '$baseUrl/product/update';
   static const String removeProduct = '$baseUrl/products/remove';
+  static const String orderHistory = '$baseUrl/order/history';
+  static const String orderCreate = '$baseUrl/order/order_create';
 }

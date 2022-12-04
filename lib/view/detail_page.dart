@@ -35,9 +35,9 @@ class DetailPage extends StatelessWidget {
                                 onPressed: () {
                                   final response = ref.read(cartProvider.notifier).addToCart(product);
                                   if(response != 'already added to cart'){
-                                    SnackShow.showFailureSnack(context, response);
+                                    SnackShow.showFailureSnack(context, response, true);
                                   }else{
-                                    SnackShow.showCommonSnack(context, response);
+                                    SnackShow.showCommonSnack(context, response, true);
                                   }
                                 }, child: Text('Add To Cart'));
                           }

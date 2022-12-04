@@ -25,7 +25,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     final auth = ref.watch(authProvider);
     ref.listen(authProvider, (previous, next) {
      if(next.err != ''){
-     SnackShow.showFailureSnack(context, next.err);
+     SnackShow.showFailureSnack(context, next.err, false);
      }
     });
     final deviceHeight =
