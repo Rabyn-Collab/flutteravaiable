@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttersamplestart/providers/auth_provider.dart';
-
+import 'package:intl/intl.dart';
 import '../providers/order_providers.dart';
 
 
@@ -20,8 +20,10 @@ class OrderHistory extends ConsumerWidget {
                 return ListView.builder(
                   itemCount:  data.length,
                     itemBuilder: (context, index){
+                    final date = DateTime.parse(data[index].dateTime);
+                    String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(date);
                     return ExpansionTile(
-                        title: Text('${data[index].dateTime}'),
+                        title: Text(formattedDate),
                       children: data[index].products.map((e) {
                         return Container(
                           margin: EdgeInsets.only(bottom: 10),
@@ -44,6 +46,13 @@ class OrderHistory extends ConsumerWidget {
                                   )
                                 ],
                               ),
+                              if(data[index].products.indexOf(data[index].products.last) == data[index].products.indexOf(e)) Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text('Total'),
+                                  Text('${data[index].amount}'),
+                                ],
+                              )
                             ],
                           ),
                         );
